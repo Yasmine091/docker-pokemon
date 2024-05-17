@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # Aller dans le dossier front-end et installer les dépendances
+echo "Création de dossiers pour contenir les volumes"
+mkdir data/{front,back,db}
+
+# Aller dans le dossier front-end et installer les dépendances
 echo "Installation des dépendances pour le front-end..."
 cd front
 npm install
