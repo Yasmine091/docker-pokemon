@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  front:
+    build:
+      context: ./front
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data/front:/app/public
+    depends_on:
+      - back
+    networks:
+      - reseauPokemon
+
+  back:
+    build:
+      context: ./back
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mysql
+      - DB_PORT=3307
+      - DB_NAME=pokemons
+      - DB_USER=pokemons-api
+      - DB_PASSWORD=m0nSup3rmOtdepa22e!
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./data/back:/api
+    depends_on:
+      - mysql
+    networks:
+      - reseauPokemon
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: m0nSup3rmOtdepa22e!R0ot
+      MYSQL_DATABASE: pokemons
+      MYSQL_USER: pokemons-api
+      MYSQL_PASSWORD: m0nSup3rmOtdepa22e!
+    volumes:
+      - ./data/db:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    ports:
+      - "3307:3306"
+    networks:
+      - reseauPokemon
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: m0nSup3rmOtdepa22e!R0ot
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - reseauPokemon
+      
+networks:
+  reseauPokemon:
+    driver: bridge
